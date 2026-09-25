@@ -10,7 +10,7 @@
 :root{--bg:#07110d;--panel:#0b1713;--panel2:#12211c;--line:#24372f;--text:#effaf4;--muted:#99aaa1;--lime:#9be564;--gold:#d8a15d}
 *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);overflow:hidden}
 #app{height:100%;display:grid;grid-template-columns:minmax(0,58%) minmax(380px,42%)}
-#mapWrap{position:relative;min-width:0}.map{height:100%;width:100%}
+#mapWrap{position:relative;min-width:0}.map{height:100%;width:100%;background:#e8ece7}
 .brand{position:absolute;z-index:700;top:14px;left:14px;background:rgba(7,17,13,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);padding:13px 16px;border-radius:15px;box-shadow:0 18px 40px rgba(0,0,0,.24)}
 .eyebrow{font-size:10px;letter-spacing:.22em;font-weight:800;color:#b6c5bd;text-transform:uppercase}.brand h1{font-size:21px;margin:4px 0 0}.brand h1 span{color:var(--lime)}
 .toolbar{position:absolute;z-index:700;top:14px;right:14px;display:flex;gap:8px;flex-wrap:wrap;background:rgba(7,17,13,.9);padding:8px;border-radius:14px;border:1px solid rgba(255,255,255,.08)}
@@ -36,9 +36,9 @@
   <section id="mapWrap">
     <div id="map" class="map"></div>
     <div class="brand"><div class="eyebrow">Immersive ecological story map</div><h1><span>Green Kolkata</span></h1></div>
-    <div class="toolbar"><input id="search" list="siteSearchList" placeholder="Search place…"/><datalist id="siteSearchList"></datalist><select id="placeSelect"><option value="">All places</option></select><button class="locBtn" id="locateBtn">📍 My Location</button></div>
+    <div class="toolbar"><input id="search" list="siteSearchList" placeholder="Search place…"/><datalist id="siteSearchList"></datalist><select id="placeSelect"><option value="" disabled>Select place…</option></select><button class="locBtn" id="locateBtn">📍 My Location</button></div>
     <div class="legend"><div class="legend-title">Ecological health</div><div class="legend-row"><span class="dot" style="background:#168a4d"></span>High</div><div class="legend-row"><span class="dot" style="background:#d7a439"></span>Moderate</div><div class="legend-row"><span class="dot" style="background:#df6558"></span>Low</div></div>
-    <button class="mapToolsBtn" id="mapToolsBtn">🗺 Map View</button><div class="mapToolsPanel" id="mapToolsPanel"><div class="toolsTitle">Choose map</div><div class="toolsGrid"><button class="toolChoice modeChoice active" data-mode="normal">🗺 Normal</button><button class="toolChoice modeChoice" data-mode="satellite">🛰 Satellite</button><button class="toolChoice modeChoice" data-mode="ndvi">🌿 NDVI</button><button class="toolChoice modeChoice" data-mode="green">🌳 Green cover</button><button class="toolChoice modeChoice" data-mode="water">💧 Water</button><button class="toolChoice modeChoice" data-mode="lst">🌡 LST</button></div><div class="toolsDivider"></div><button class="toolWide" id="toolsLocateBtn">🚗 Directions from me</button></div><div class="routeDock" id="routeDock"><div class="routeDockTop"><div><div class="routeDockTitle">Directions</div><div class="routeDockPlace" id="routeDockPlace">Choose a destination</div></div><button class="routeClose" id="routeClose" title="Hide route panel">×</button></div><div class="routeEndpoints"><div class="routeEndpoint"><div class="pin start">A</div><div style="flex:1"><b>Your location</b><span id="routeStartText">Use My Location</span></div></div><div class="routeEndpoint"><div class="pin end">B</div><div style="flex:1"><input id="routeDestInput" list="routeSiteList" placeholder="Search destination…" style="width:100%;background:transparent;color:#fff;border:0;outline:0;font-weight:800;font-size:12px"/><datalist id="routeSiteList"></datalist><span>Destination</span></div></div></div><button class="toolWide" id="routeSearchBtn" style="margin-top:8px">Show route</button><div class="routeStats"><div class="routeStat"><b id="roadDistance">—</b><small>Road distance</small></div><div class="routeStat"><b id="roadTime">—</b><small>Estimated time</small></div></div><div class="routeRoads" id="roadNames">Choose a destination and allow location access.</div><a class="startNavBtn" id="startNavBtn" target="_blank" rel="noopener">▶ Start navigation in Google Maps</a><div class="routeNote">Estimated time here does not include live traffic. Google Maps may show a different live ETA.</div></div>
+    <button class="mapToolsBtn" id="mapToolsBtn">🗺 Map Layers</button><div class="mapToolsPanel" id="mapToolsPanel"><div class="toolsTitle">Choose map</div><div class="toolsGrid"><button class="toolChoice modeChoice active" data-mode="normal">🗺 Normal</button><button class="toolChoice modeChoice" data-mode="satellite">🛰 Satellite</button><button class="toolChoice modeChoice" data-mode="ndvi">🌿 NDVI</button><button class="toolChoice modeChoice" data-mode="green">🌳 Green cover</button><button class="toolChoice modeChoice" data-mode="water">💧 Water</button><button class="toolChoice modeChoice" data-mode="lst">🌡 LST</button></div><div class="toolsDivider"></div><button class="toolWide" id="toolsLocateBtn">🚗 Directions from me</button></div><div class="routeDock" id="routeDock"><div class="routeDockTop"><div><div class="routeDockTitle">Directions</div><div class="routeDockPlace" id="routeDockPlace">Choose a destination</div></div><button class="routeClose" id="routeClose" title="Hide route panel">×</button></div><div class="routeEndpoints"><div class="routeEndpoint"><div class="pin start">A</div><div style="flex:1"><b>Your location</b><span id="routeStartText">Use My Location</span></div></div><div class="routeEndpoint"><div class="pin end">B</div><div style="flex:1"><input id="routeDestInput" list="routeSiteList" placeholder="Search destination…" style="width:100%;background:transparent;color:#fff;border:0;outline:0;font-weight:800;font-size:12px"/><datalist id="routeSiteList"></datalist><span>Destination</span></div></div></div><button class="toolWide" id="routeSearchBtn" style="margin-top:8px">Show route</button><div class="routeStats"><div class="routeStat"><b id="roadDistance">—</b><small>Road distance</small></div><div class="routeStat"><b id="roadTime">—</b><small>Estimated time</small></div></div><div class="routeRoads" id="roadNames">Choose a destination and allow location access.</div><a class="startNavBtn" id="startNavBtn" target="_blank" rel="noopener">▶ Start navigation in Google Maps</a><div class="routeNote">Estimated time here does not include live traffic. Google Maps may show a different live ETA.</div></div>
   </section>
   <aside id="story">
     <div class="storyTop"><div><div class="kicker">Curated ecological journey</div><h2 id="name">Green Kolkata</h2><div class="category" id="category"></div></div><div class="counter" id="counter"></div></div>
@@ -135,10 +135,9 @@ function applyMapMode(kind){
   }else if(kind==='normal'){
     street.addTo(map);
   }else{
-    street.addTo(map);
     const layer=rasterLayers[kind];
     if(layer){
-      layer.setOpacity(kind==='water'||kind==='green' ? 0.78 : 0.86);
+      layer.setOpacity(kind==='water'||kind==='green' ? 0.92 : 0.96);
       layer.addTo(map);
       if(layer.bringToFront) layer.bringToFront();
     }
@@ -174,6 +173,7 @@ function routeToTypedDestination(){
     return;
   }
   render(ix);
+  document.getElementById('routeDock').classList.add('show');
   if(!userLocation) locateUser(); else updateRoadRoute();
 }
 
@@ -249,7 +249,7 @@ function render(i){
   const photo=PLACE_PHOTOS[s.name]||{src:s.images.eco,credit:'Ecological site view from GEE analysis',source:''};
   document.getElementById('name').textContent=s.name;
   document.getElementById('category').textContent=s.category;
-  document.getElementById('counter').textContent=`${current+1} / ${sites.length}`;document.getElementById('placeSelect').value=s.name;document.getElementById('routeDestInput').value=s.name;
+  document.getElementById('counter').textContent=`${current+1} / ${sites.length}`;document.getElementById('placeSelect').value=s.name;document.getElementById('search').value=s.name;document.getElementById('routeDestInput').value=s.name;
   setHero(photo.src,'PLACE PHOTO');
   const creditEl=document.getElementById('photoCredit');
   creditEl.innerHTML=photo.source?`${photo.credit} · <a href="${photo.source}" target="_blank" rel="noopener">source</a>`:photo.credit;
@@ -263,11 +263,11 @@ function render(i){
   const badge=document.getElementById('badge');badge.textContent=s.health+' ecological health';badge.style.color=healthColors[s.health]||'#9be564';badge.style.background=(healthColors[s.health]||'#9be564')+'22';badge.style.border='1px solid '+(healthColors[s.health]||'#9be564')+'66';
   document.getElementById('mNdvi').textContent=s.mean_ndvi.toFixed(3);document.getElementById('mGreen').textContent=s.green_cover.toFixed(1)+'%';document.getElementById('mWater').textContent=s.water_cover.toFixed(1)+'%';document.getElementById('mLst').textContent=s.mean_lst.toFixed(1)+'°C';document.getElementById('mCooling').textContent=(s.cooling>0?'+':'')+s.cooling.toFixed(1)+'°C';document.getElementById('mScore').textContent=s.score.toFixed(1);document.getElementById('storyText').textContent=s.story;document.getElementById('scoreText').textContent=s.score.toFixed(1);document.getElementById('scoreBar').style.width=Math.max(0,Math.min(100,s.score))+'%';updateLocationDistance();if(userLocation){updateRoadRoute();}else{map.flyTo([s.lat,s.lon],14,{duration:.8});}
 }
-document.getElementById('prev').onclick=()=>render(current-1);document.getElementById('next').onclick=()=>render(current+1);document.getElementById('locateBtn').onclick=()=>{document.getElementById('routeDock').classList.add('show');locateUser();};document.getElementById('routeClose').onclick=()=>document.getElementById('routeDock').classList.remove('show');document.getElementById('showRouteBtn').onclick=()=>{if(userLocation){updateRoadRoute();}else{locateUser();}};
+document.getElementById('prev').onclick=()=>render(current-1);document.getElementById('next').onclick=()=>render(current+1);document.getElementById('locateBtn').onclick=()=>{document.getElementById('routeDock').classList.add('show');locateUser();};document.getElementById('routeClose').onclick=()=>document.getElementById('routeDock').classList.remove('show');
 document.getElementById('mapToolsBtn').onclick=()=>document.getElementById('mapToolsPanel').classList.toggle('show');
 document.querySelectorAll('.modeChoice').forEach(btn=>btn.onclick=()=>{applyMapMode(btn.dataset.mode);document.getElementById('mapToolsPanel').classList.remove('show');});
 document.getElementById('toolsLocateBtn').onclick=()=>{document.getElementById('mapToolsPanel').classList.remove('show');document.getElementById('routeDock').classList.add('show');if(userLocation){updateRoadRoute();}else{locateUser();}};
-document.getElementById('search').addEventListener('change',e=>{const ix=findSiteIndex(e.target.value);if(ix>=0)render(ix);});
+document.getElementById('search').addEventListener('input',e=>{const exact=sites.findIndex(s=>s.name.toLowerCase()===e.target.value.trim().toLowerCase());if(exact>=0)render(exact);});document.getElementById('search').addEventListener('change',e=>{const ix=findSiteIndex(e.target.value);if(ix>=0)render(ix);});
 document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Enter'){const ix=findSiteIndex(e.target.value);if(ix>=0)render(ix);}});
 document.getElementById('placeSelect').onchange=e=>{const ix=findSiteIndex(e.target.value);if(ix>=0)render(ix);};
 document.getElementById('routeSearchBtn').onclick=routeToTypedDestination;
