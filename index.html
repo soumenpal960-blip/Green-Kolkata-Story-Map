@@ -1,1 +1,170 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Green Kolkata — Urban Parks & Biodiversity</title>
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{--bg:#07110d;--panel:#0b1713;--panel2:#12211c;--line:#24372f;--text:#effaf4;--muted:#99aaa1;--lime:#9be564;--gold:#d8a15d}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);overflow:hidden}
+#app{height:100%;display:grid;grid-template-columns:minmax(0,58%) minmax(380px,42%)}
+#mapWrap{position:relative;min-width:0}.map{height:100%;width:100%}
+.brand{position:absolute;z-index:700;top:14px;left:14px;background:rgba(7,17,13,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);padding:13px 16px;border-radius:15px;box-shadow:0 18px 40px rgba(0,0,0,.24)}
+.eyebrow{font-size:10px;letter-spacing:.22em;font-weight:800;color:#b6c5bd;text-transform:uppercase}.brand h1{font-size:21px;margin:4px 0 0}.brand h1 span{color:var(--lime)}
+.toolbar{position:absolute;z-index:700;top:14px;right:14px;display:flex;gap:8px;background:rgba(7,17,13,.9);padding:8px;border-radius:14px;border:1px solid rgba(255,255,255,.08)}
+.toolbar input,.toolbar select{background:#18251f;color:#f5fff8;border:1px solid #2b3b34;border-radius:9px;padding:10px 11px;outline:none}.toolbar input{width:210px}
+.legend{position:absolute;z-index:700;bottom:16px;left:14px;background:rgba(7,17,13,.92);padding:11px 13px;border-radius:14px;border:1px solid rgba(255,255,255,.08);font-size:11px}.legend-title{font-weight:800;margin-bottom:8px}.legend-row{display:flex;align-items:center;gap:8px;margin:5px 0;color:#dce8e1}.dot{width:10px;height:10px;border-radius:50%}
+#story{height:100%;overflow:auto;padding:18px 20px 22px;background:linear-gradient(180deg,#07110d,#0b1713);border-left:1px solid rgba(255,255,255,.08)}
+.storyTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.counter{font-size:11px;color:var(--muted);background:#15231d;border:1px solid var(--line);padding:6px 9px;border-radius:999px;white-space:nowrap}.kicker{font-size:10px;letter-spacing:.18em;color:#aac3b5;font-weight:800;text-transform:uppercase}.storyTop h2{font-family:Georgia,serif;font-size:35px;line-height:1;margin:5px 0 7px}.category{color:#cbd9d1;font-size:13px}
+.hero{margin-top:14px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#132019;position:relative;aspect-ratio:16/7}.hero img{width:100%;height:100%;object-fit:cover;image-rendering:auto}.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(3,10,7,.66))}.heroCaption{position:absolute;z-index:2;left:15px;bottom:12px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.hero{cursor:zoom-in}.photoCredit{font-size:9px;color:#86978e;margin-top:6px;line-height:1.35}.photoCredit a{color:#a9c7b7;text-decoration:none}.photoCredit a:hover{text-decoration:underline}.imageModal{display:none;position:fixed;z-index:5000;inset:0;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:28px}.imageModal.open{display:flex}.imageModal img{max-width:94vw;max-height:88vh;object-fit:contain;border-radius:14px;box-shadow:0 24px 80px #000}.imageModal button{position:absolute;top:18px;right:22px;border:0;background:#fff;color:#111;width:38px;height:38px;border-radius:50%;font-size:24px;cursor:pointer}.imageModal .modalLabel{position:absolute;left:24px;bottom:18px;color:#fff;background:rgba(0,0,0,.55);padding:7px 10px;border-radius:9px;font-size:11px}
+.thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0 12px}.thumb{height:72px;border-radius:11px;overflow:hidden;border:1px solid var(--line);cursor:pointer;background:#14211b;position:relative}.thumb img{width:100%;height:100%;object-fit:cover}.thumb span{position:absolute;left:6px;bottom:5px;font-size:9px;background:rgba(0,0,0,.62);padding:3px 5px;border-radius:5px}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.04em;margin:2px 0 9px}.badge:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{background:#111f19;border:1px solid var(--line);border-radius:13px;padding:10px}.metric b{display:block;font-size:18px;color:#fff}.metric small{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.section{margin-top:13px;background:#101c17;border:1px solid var(--line);border-radius:15px;padding:13px}.section h3{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#b9c8c0;margin:0 0 8px}.section p{margin:0;color:#e9f2ed;line-height:1.55;font-size:13px}
+.progress{height:7px;background:#26372f;border-radius:99px;overflow:hidden;margin-top:7px}.progress i{display:block;height:100%;background:var(--lime);border-radius:99px}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.nav button{border:1px solid var(--line);background:#17261f;color:#fff;padding:12px;border-radius:12px;font-weight:750;cursor:pointer}.nav button.primary{background:#c98e53;color:#111;border-color:#c98e53}.nav button:hover{filter:brightness(1.08)}
+.layers{position:absolute;z-index:700;bottom:16px;right:14px;display:flex;gap:6px;flex-wrap:wrap;max-width:360px;justify-content:flex-end}.layerBtn{border:1px solid rgba(255,255,255,.14);background:rgba(7,17,13,.9);color:#dbe8e1;padding:8px 10px;border-radius:999px;font-size:10px;cursor:pointer}.layerBtn.active{background:#eaf7ef;color:#102018}
+.credit{margin-top:15px;color:#71847a;font-size:10px;text-align:center}
+.leaflet-control-attribution{font-size:8px!important}
+@media(max-width:900px){html,body{overflow:auto}#app{grid-template-columns:1fr;grid-template-rows:58vh auto}#story{height:auto;overflow:visible}.toolbar{left:14px;right:auto;top:82px}.toolbar input{width:170px}.layers{max-width:260px}.storyTop h2{font-size:30px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <section id="mapWrap">
+    <div id="map" class="map"></div>
+    <div class="brand"><div class="eyebrow">Immersive ecological story map</div><h1><span>Green Kolkata</span></h1></div>
+    <div class="toolbar"><input id="search" placeholder="Search green site…"/><select id="filter"><option>All places</option><option>High</option><option>Moderate</option><option>Low</option></select></div>
+    <div class="legend"><div class="legend-title">Ecological health</div><div class="legend-row"><span class="dot" style="background:#168a4d"></span>High</div><div class="legend-row"><span class="dot" style="background:#d7a439"></span>Moderate</div><div class="legend-row"><span class="dot" style="background:#df6558"></span>Low</div></div>
+    <div class="layers"><button class="layerBtn active" data-layer="sat">Satellite</button><button class="layerBtn" data-layer="ndvi">NDVI</button><button class="layerBtn" data-layer="green">Green cover</button><button class="layerBtn" data-layer="water">Water</button><button class="layerBtn" data-layer="lst">LST</button></div>
+  </section>
+  <aside id="story">
+    <div class="storyTop"><div><div class="kicker">Curated ecological journey</div><h2 id="name">Green Kolkata</h2><div class="category" id="category"></div></div><div class="counter" id="counter"></div></div>
+    <div class="hero"><img id="hero" alt="Place photograph"/><div class="heroCaption" id="heroCaption">Place photograph · click to enlarge</div></div>
+    <div class="photoCredit" id="photoCredit"></div>
+    <div class="thumbs" id="thumbs"></div>
+    <div id="badge" class="badge"></div>
+    <div class="metrics">
+      <div class="metric"><b id="mNdvi">—</b><small>Mean NDVI</small></div>
+      <div class="metric"><b id="mGreen">—</b><small>Green cover</small></div>
+      <div class="metric"><b id="mWater">—</b><small>Water cover</small></div>
+      <div class="metric"><b id="mLst">—</b><small>Mean LST</small></div>
+      <div class="metric"><b id="mCooling">—</b><small>Cooling effect</small></div>
+      <div class="metric"><b id="mScore">—</b><small>Green score</small></div>
+    </div>
+    <div class="section"><h3>Why this place matters</h3><p id="storyText"></p></div>
+    <div class="section"><h3>Ecological health score</h3><p><b id="scoreText"></b> / 100</p><div class="progress"><i id="scoreBar"></i></div></div>
+    <div class="nav"><button id="prev">← Previous place</button><button id="next" class="primary">Next place →</button></div>
+    <div class="credit">Created by Soumen Pal · Remote Sensing & GIS · 2025 GEE analysis · Site metrics from exported CSV</div>
+  </aside>
+</div>
+<div class="imageModal" id="imageModal"><button id="modalClose" aria-label="Close">×</button><img id="modalImage" alt="Large place photograph"/><div class="modalLabel" id="modalLabel"></div></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const healthColors={High:'#168a4d',Moderate:'#d7a439',Low:'#df6558','Very High':'#075e35','Very Low':'#b53b35'};
+let sites=[],rasters={},current=0,markers=[];
+const INLINE_DATA={"sites": [{"id": 1, "name": "Maidan", "category": "Urban Park / Open Green Space", "lat": 22.550700000000003, "lon": 88.3426, "mean_ndvi": 0.475, "green_cover": 90.5, "water_cover": 1.5, "mean_lst": 30.1, "cooling": -0.5, "score": 68.4, "health": "High", "story": "One of central Kolkata’s largest open green landscapes, the Maidan combines extensive grass cover with mature trees and recreational grounds. Its open character makes it an important urban breathing space within a dense built-up core.", "images": {"ndvi": "assets/sites/maidan_ndvi.png", "lst": "assets/sites/maidan_lst.png", "water": "assets/sites/maidan_water.png", "green": "assets/sites/maidan_green.png", "eco": "assets/sites/maidan_eco.png"}}, {"id": 2, "name": "Rabindra Sarobar", "category": "Lake and Urban Biodiversity", "lat": 22.5075, "lon": 88.3639, "mean_ndvi": 0.286, "green_cover": 37.8, "water_cover": 5.1, "mean_lst": 30.2, "cooling": -0.6, "score": 39.1, "health": "Low", "story": "A prominent lake-and-green ecosystem in south Kolkata. Tree cover around the water supports urban biodiversity, recreation and a distinctive blue-green landscape within the city.", "images": {"ndvi": "assets/sites/rabindra-sarobar_ndvi.png", "lst": "assets/sites/rabindra-sarobar_lst.png", "water": "assets/sites/rabindra-sarobar_water.png", "green": "assets/sites/rabindra-sarobar_green.png", "eco": "assets/sites/rabindra-sarobar_eco.png"}}, {"id": 3, "name": "Subhas Sarobar", "category": "Urban Lake", "lat": 22.565699999999996, "lon": 88.3917, "mean_ndvi": 0.26, "green_cover": 30.8, "water_cover": 0.2, "mean_lst": 31.7, "cooling": -2.1, "score": 28.3, "health": "Low", "story": "An urban lake surrounded by green space in east Kolkata. The site adds open water, vegetation and recreational value to an otherwise intensely developed urban setting.", "images": {"ndvi": "assets/sites/subhas-sarobar_ndvi.png", "lst": "assets/sites/subhas-sarobar_lst.png", "water": "assets/sites/subhas-sarobar_water.png", "green": "assets/sites/subhas-sarobar_green.png", "eco": "assets/sites/subhas-sarobar_eco.png"}}, {"id": 4, "name": "Central Park Salt Lake", "category": "Urban Park", "lat": 22.586800000000004, "lon": 88.412, "mean_ndvi": 0.379, "green_cover": 60.7, "water_cover": 0.7, "mean_lst": 30.7, "cooling": -1.1, "score": 49.6, "health": "Moderate", "story": "A planned green space in Bidhannagar with vegetation and water features. It functions as an important recreational and ecological patch within the Salt Lake urban fabric.", "images": {"ndvi": "assets/sites/central-park-salt-lake_ndvi.png", "lst": "assets/sites/central-park-salt-lake_lst.png", "water": "assets/sites/central-park-salt-lake_water.png", "green": "assets/sites/central-park-salt-lake_green.png", "eco": "assets/sites/central-park-salt-lake_eco.png"}}, {"id": 5, "name": "Eco Park New Town", "category": "Urban Park and Lake", "lat": 22.5995, "lon": 88.465, "mean_ndvi": 0.154, "green_cover": 48.6, "water_cover": 47.9, "mean_lst": 28.7, "cooling": 0.9, "score": 58.5, "health": "Moderate", "story": "A large planned urban park in New Town with a major water body, open lawns and planted landscapes. Its high water share makes it a distinctive blue-green space in the eastern metropolitan area.", "images": {"ndvi": "assets/sites/eco-park-new-town_ndvi.png", "lst": "assets/sites/eco-park-new-town_lst.png", "water": "assets/sites/eco-park-new-town_water.png", "green": "assets/sites/eco-park-new-town_green.png", "eco": "assets/sites/eco-park-new-town_eco.png"}}, {"id": 6, "name": "East Kolkata Wetlands", "category": "Wetland Biodiversity", "lat": 22.534999999999997, "lon": 88.43, "mean_ndvi": 0.337, "green_cover": 55.6, "water_cover": 16.6, "mean_lst": 30.8, "cooling": -1.2, "score": 51.5, "health": "Moderate", "story": "A large wetland landscape on the eastern fringe of Kolkata. The area’s water bodies, fisheries and vegetation form a major ecological system and a key part of the metropolitan blue-green network.", "images": {"ndvi": "assets/sites/east-kolkata-wetlands_ndvi.png", "lst": "assets/sites/east-kolkata-wetlands_lst.png", "water": "assets/sites/east-kolkata-wetlands_water.png", "green": "assets/sites/east-kolkata-wetlands_green.png", "eco": "assets/sites/east-kolkata-wetlands_eco.png"}}, {"id": 7, "name": "Nalban Wetland", "category": "Wetland / Lake", "lat": 22.568, "lon": 88.415, "mean_ndvi": 0.434, "green_cover": 80.3, "water_cover": 3.2, "mean_lst": 30.2, "cooling": -0.6, "score": 62.7, "health": "High", "story": "Part of the eastern wetland landscape, Nalban combines open water and surrounding vegetation. It contributes to the continuity of Kolkata’s wetland and biodiversity network.", "images": {"ndvi": "assets/sites/nalban-wetland_ndvi.png", "lst": "assets/sites/nalban-wetland_lst.png", "water": "assets/sites/nalban-wetland_water.png", "green": "assets/sites/nalban-wetland_green.png", "eco": "assets/sites/nalban-wetland_eco.png"}}, {"id": 8, "name": "Indian Botanic Garden", "category": "Botanical Garden", "lat": 22.5588, "lon": 88.2865, "mean_ndvi": 0.502, "green_cover": 83.9, "water_cover": 3.8, "mean_lst": 28.3, "cooling": 1.3, "score": 73.5, "health": "High", "story": "A major botanical landscape on the Howrah side of the Hooghly, characterized by extensive tree cover and diverse plant collections. It is one of the strongest green patches in the study area.", "images": {"ndvi": "assets/sites/indian-botanic-garden_ndvi.png", "lst": "assets/sites/indian-botanic-garden_lst.png", "water": "assets/sites/indian-botanic-garden_water.png", "green": "assets/sites/indian-botanic-garden_green.png", "eco": "assets/sites/indian-botanic-garden_eco.png"}}, {"id": 9, "name": "Elliot Park", "category": "Urban Park", "lat": 22.543, "lon": 88.333, "mean_ndvi": 0.409, "green_cover": 76.6, "water_cover": 1.2, "mean_lst": 31.0, "cooling": -1.3, "score": 56.8, "health": "Moderate", "story": "A compact green refuge in central Kolkata. Although smaller than the city’s major parks, its vegetation offers recreational value and localized relief within a heavily built-up setting.", "images": {"ndvi": "assets/sites/elliot-park_ndvi.png", "lst": "assets/sites/elliot-park_lst.png", "water": "assets/sites/elliot-park_water.png", "green": "assets/sites/elliot-park_green.png", "eco": "assets/sites/elliot-park_eco.png"}}, {"id": 10, "name": "Alipore Zoological Garden", "category": "Urban Biodiversity", "lat": 22.535400000000003, "lon": 88.3507, "mean_ndvi": 0.245, "green_cover": 28.0, "water_cover": 0.2, "mean_lst": 31.1, "cooling": -1.5, "score": 28.4, "health": "Low", "story": "A managed urban biodiversity site with tree cover and landscaped habitat. It forms an important green patch in the Alipore area despite its dense metropolitan surroundings.", "images": {"ndvi": "assets/sites/alipore-zoological-garden_ndvi.png", "lst": "assets/sites/alipore-zoological-garden_lst.png", "water": "assets/sites/alipore-zoological-garden_water.png", "green": "assets/sites/alipore-zoological-garden_green.png", "eco": "assets/sites/alipore-zoological-garden_eco.png"}}], "rasters": {"ndvi": {"bounds": [[22.42994449765192, 88.21995079224173], [22.700157735115074, 88.58008538964525]], "file": "assets/ndvi_overlay.svg"}, "lst": {"bounds": [[22.4297648345951, 88.21986096071332], [22.700067903586664, 88.58017522117366]], "file": "assets/lst_overlay.svg"}, "water": {"bounds": [[22.42994449765192, 88.21995079224173], [22.700157735115074, 88.58008538964525]], "file": "assets/water_overlay.svg"}, "green": {"bounds": [[22.42994449765192, 88.21995079224173], [22.700157735115074, 88.58008538964525]], "file": "assets/green_overlay.svg"}}};
+const PLACE_PHOTOS={
+  'Maidan':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/MAIDAN_Kolkata.jpg/1280px-MAIDAN_Kolkata.jpg',
+    credit:'Photo: Susovan Chakraborty5 · CC0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:MAIDAN_Kolkata.jpg'
+  },
+  'Rabindra Sarobar':{
+    src:'https://upload.wikimedia.org/wikipedia/commons/8/80/Rabindra_Sarovar_Kolkata.jpg',
+    credit:'Photo: Rakib.Official · CC BY-SA 4.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Rabindra_Sarovar_Kolkata.jpg'
+  },
+  'Subhas Sarobar':{
+    src:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=88.3908,22.5616,88.4108,22.5756&bboxSR=4326&size=1200,700&imageSR=4326&format=jpg&f=image',
+    credit:'Satellite view: Esri World Imagery',
+    source:'https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9'
+  },
+  'Central Park Salt Lake':{
+    src:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salt_Lake_City_with_Kestopur_Canal_and_Central_Park_-_Aerial_View_-_Kolkata_2016-08-04_5677.JPG/1280px-Salt_Lake_City_with_Kestopur_Canal_and_Central_Park_-_Aerial_View_-_Kolkata_2016-08-04_5677.JPG',
+    credit:'Photo: Biswarup Ganguly · CC BY 3.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Salt_Lake_City_with_Kestopur_Canal_and_Central_Park_-_Aerial_View_-_Kolkata_2016-08-04_5677.JPG'
+  },
+  'Eco Park New Town':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Eco_park-25-new_town_smart_city-kolkata-India.jpg/1280px-Eco_park-25-new_town_smart_city-kolkata-India.jpg',
+    credit:'Photo: Yercaud-elango · CC BY-SA 4.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Eco_park-25-new_town_smart_city-kolkata-India.jpg'
+  },
+  'East Kolkata Wetlands':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/A_Boat_on_the_lake.jpg/960px-A_Boat_on_the_lake.jpg',
+    credit:'Photo: Sumasa · CC BY-SA 4.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:A_Boat_on_the_lake.jpg'
+  },
+  'Nalban Wetland':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Nalban_Waterbody_-_Salt_Lake_City_-_Kolkata_2003-09-02_00089.JPG/1280px-Nalban_Waterbody_-_Salt_Lake_City_-_Kolkata_2003-09-02_00089.JPG',
+    credit:'Photo: Biswarup Ganguly · CC BY-SA 4.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Nalban_Waterbody_-_Salt_Lake_City_-_Kolkata_2003-09-02_00089.JPG'
+  },
+  'Indian Botanic Garden':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Indian_Botanic_Garden_-_Howrah_2012-01-29_1689.JPG/1280px-Indian_Botanic_Garden_-_Howrah_2012-01-29_1689.JPG',
+    credit:'Photo: Biswarup Ganguly · CC BY 3.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Indian_Botanic_Garden_-_Howrah_2012-01-29_1689.JPG'
+  },
+  'Elliot Park':{
+    src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Elliot_Park_-_Kolkata_2013-01-05_2439.JPG/1280px-Elliot_Park_-_Kolkata_2013-01-05_2439.JPG',
+    credit:'Photo: Biswarup Ganguly · CC BY 3.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Elliot_Park_-_Kolkata_2013-01-05_2439.JPG'
+  },
+  'Alipore Zoological Garden':{
+    src:'https://upload.wikimedia.org/wikipedia/commons/9/93/Zoological_park_Alipore.jpg',
+    credit:'Photo: Samirmaity31 · CC BY 4.0 · Wikimedia Commons',
+    source:'https://commons.wikimedia.org/wiki/File:Zoological_park_Alipore.jpg'
+  }
+};
+const map=L.map('map',{zoomControl:true,minZoom:10,maxZoom:18}).setView([22.56,88.39],11);
+const street=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'});
+const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'Esri World Imagery'}).addTo(map);
+let rasterLayers={};
+function makeOverlay(info,opacity=.62){return L.imageOverlay(info.file,info.bounds,{opacity,interactive:false});}
+(()=>{const data=INLINE_DATA;sites=data.sites;rasters=data.rasters;rasterLayers.ndvi=makeOverlay(rasters.ndvi,.66);rasterLayers.lst=makeOverlay(rasters.lst,.58);rasterLayers.green=makeOverlay(rasters.green,.65);rasterLayers.water=makeOverlay(rasters.water,.7);buildMarkers();render(0);})();
+function buildMarkers(){markers.forEach(m=>map.removeLayer(m));markers=[];sites.forEach((s,i)=>{const c=healthColors[s.health]||'#9be564';const icon=L.divIcon({className:'',html:`<div style="width:19px;height:19px;border-radius:50%;background:${c};border:3px solid white;box-shadow:0 2px 12px #0008"></div>`,iconSize:[19,19],iconAnchor:[10,10]});const m=L.marker([s.lat,s.lon],{icon}).addTo(map).on('click',()=>render(i));m.bindTooltip(s.name,{direction:'top'});markers.push(m);});}
+function satellitePreview(s){
+  const dx=0.012,dy=0.008;
+  const bbox=[s.lon-dx,s.lat-dy,s.lon+dx,s.lat+dy].join(',');
+  return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox='+bbox+'&bboxSR=4326&size=900,520&imageSR=4326&format=jpg&f=image';
+}
+function setHero(src,label){
+  const hero=document.getElementById('hero');
+  hero.onerror=()=>{const fallback=satellitePreview(sites[current]);hero.onerror=null;hero.src=fallback;hero.dataset.full=fallback;document.getElementById('heroCaption').textContent='SATELLITE VIEW · click to enlarge';};
+  hero.src=src;hero.dataset.full=src;document.getElementById('heroCaption').textContent=label+' · click to enlarge';
+}
+function render(i){
+  current=(i+sites.length)%sites.length;
+  const s=sites[current];
+  const photo=PLACE_PHOTOS[s.name]||{src:s.images.eco,credit:'Ecological site view from GEE analysis',source:''};
+  document.getElementById('name').textContent=s.name;
+  document.getElementById('category').textContent=s.category;
+  document.getElementById('counter').textContent=`${current+1} / ${sites.length}`;
+  setHero(photo.src,'PLACE PHOTO');
+  const creditEl=document.getElementById('photoCredit');
+  creditEl.innerHTML=photo.source?`${photo.credit} · <a href="${photo.source}" target="_blank" rel="noopener">source</a>`:photo.credit;
+  const thumbs=document.getElementById('thumbs');thumbs.innerHTML='';
+  const items=[['PHOTO',photo.src],['SATELLITE',satellitePreview(s)]];
+  items.forEach(([lab,src])=>{
+    const d=document.createElement('div');d.className='thumb';d.innerHTML=`<img src="${src}" alt="${lab}"><span>${lab}</span>`;
+    d.onclick=()=>{setHero(src,lab==='PHOTO'?'PLACE PHOTO':lab+' VIEW');creditEl.style.display=lab==='PHOTO'?'block':'none';};
+    thumbs.appendChild(d);
+  });
+  const badge=document.getElementById('badge');badge.textContent=s.health+' ecological health';badge.style.color=healthColors[s.health]||'#9be564';badge.style.background=(healthColors[s.health]||'#9be564')+'22';badge.style.border='1px solid '+(healthColors[s.health]||'#9be564')+'66';
+  document.getElementById('mNdvi').textContent=s.mean_ndvi.toFixed(3);document.getElementById('mGreen').textContent=s.green_cover.toFixed(1)+'%';document.getElementById('mWater').textContent=s.water_cover.toFixed(1)+'%';document.getElementById('mLst').textContent=s.mean_lst.toFixed(1)+'°C';document.getElementById('mCooling').textContent=(s.cooling>0?'+':'')+s.cooling.toFixed(1)+'°C';document.getElementById('mScore').textContent=s.score.toFixed(1);document.getElementById('storyText').textContent=s.story;document.getElementById('scoreText').textContent=s.score.toFixed(1);document.getElementById('scoreBar').style.width=Math.max(0,Math.min(100,s.score))+'%';map.flyTo([s.lat,s.lon],14,{duration:.8});
+}
+document.getElementById('prev').onclick=()=>render(current-1);document.getElementById('next').onclick=()=>render(current+1);
+document.querySelectorAll('.layerBtn').forEach(btn=>btn.onclick=()=>{const k=btn.dataset.layer;document.querySelectorAll('.layerBtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');Object.values(rasterLayers).forEach(l=>map.removeLayer(l));map.removeLayer(street);map.removeLayer(sat);if(k==='sat')sat.addTo(map);else{street.addTo(map);rasterLayers[k].addTo(map);}});
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();const ix=sites.findIndex(s=>s.name.toLowerCase().includes(q));if(ix>=0&&q.length>1)render(ix)});
+document.getElementById('filter').onchange=e=>{const v=e.target.value;markers.forEach((m,i)=>{if(v==='All places'||sites[i].health===v)m.addTo(map);else map.removeLayer(m)});};
+
+const imageModal=document.getElementById('imageModal'),modalImage=document.getElementById('modalImage'),modalLabel=document.getElementById('modalLabel');
+document.getElementById('hero').onclick=()=>{modalImage.src=document.getElementById('hero').dataset.full||document.getElementById('hero').src;modalLabel.textContent=sites[current]?.name||'Green Kolkata';imageModal.classList.add('open');};
+document.getElementById('modalClose').onclick=()=>imageModal.classList.remove('open');
+imageModal.onclick=e=>{if(e.target===imageModal)imageModal.classList.remove('open');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')imageModal.classList.remove('open');});
+
+</script>
+</body></html>
